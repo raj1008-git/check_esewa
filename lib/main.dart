@@ -10,10 +10,10 @@ class MyNewsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: MainPage(),
-      home: HomePage(),
+      home: MainPage(),
     );
   }
 }

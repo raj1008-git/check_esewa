@@ -49,7 +49,7 @@ class MainPage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ImageIcon(
-                                AssetImage("assets/logos/google.png"),
+                                AssetImage("assets/logos/gog.png"),
                               ),
                               // Icon(Icons.access_alarms),
                               SizedBox(
@@ -70,10 +70,50 @@ class MainPage extends StatelessWidget {
                       ),
                       MaterialButton(
                         onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (BuildContext context) => HomePage()),
+                          // );
+                          // Navigator.push(
+                          //   context,
+                          //   PageRouteBuilder(
+                          //     pageBuilder:
+                          //         (context, animation, secondaryAnimation) =>
+                          //             HomePage(),
+                          //     transitionsBuilder: (context, animation,
+                          //         secondaryAnimation, child) {
+                          //       return SlideTransition(
+                          //         position: Tween<Offset>(
+                          //           begin: Offset(1.0, 0.0),
+                          //           end: Offset.zero,
+                          //         ).animate(animation),
+                          //         child: child,
+                          //       );
+                          //     },
+                          //   ),
+                          // );
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => HomePage()),
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      HomePage(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeInOut,
+                                    // duration: const Duration(milliseconds: 500),
+                                  )),
+                                  child: child,
+                                );
+                              },
+                            ),
                           );
                         },
                         color: Color.fromRGBO(128, 128, 128, 0.4),
@@ -83,7 +123,7 @@ class MainPage extends StatelessWidget {
                         child: const Padding(
                           padding: EdgeInsets.only(top: 12, bottom: 12),
                           child: Text(
-                            'login to my account',
+                            'Login to my account',
                             style: TextStyle(color: Colors.green, fontSize: 20),
                           ),
                         ),

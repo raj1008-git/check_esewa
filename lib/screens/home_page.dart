@@ -184,20 +184,60 @@ class NewsMainPage extends StatelessWidget {
                   itemCount: snapshot.data!.articles.length,
                   itemBuilder: (context, index) {
                     final article = snapshot.data!.articles[index];
-                    return CategoryItemTile(
-                        source: article.source,
-                        author: article.author,
-                        title: article.title,
-                        urlToImage: article.urlToImage,
-                        content: article.content,
-                        description: article.description,
-                        publishedAt: article.publishedAt,
-                        url: article.url);
-                    //   NewsContainer(
-                    //   title: article.title,
-                    //   author: article.author,
-                    //   uriToImage: article.urlToImage,
-                    // );
+                    return GestureDetector(
+                      onTap: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => NewsPage(
+                        //         source: article.source,
+                        //         author: article.author,
+                        //         title: article.title,
+                        //         urlToImage: article.urlToImage,
+                        //         content: article.content,
+                        //         description: article.description,
+                        //         publishedAt: article.publishedAt,
+                        //         url: article.url),
+                        //   ),
+                        // );
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    NewsPage(
+                              source: article.source,
+                              author: article.author,
+                              title: article.title,
+                              urlToImage: article.urlToImage,
+                              content: article.content,
+                              description: article.description,
+                              publishedAt: article.publishedAt,
+                              url: article.url,
+                            ),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: Offset(1.0, 0.0),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: CategoryItemTile(
+                          source: article.source,
+                          author: article.author,
+                          title: article.title,
+                          urlToImage: article.urlToImage,
+                          content: article.content,
+                          description: article.description,
+                          publishedAt: article.publishedAt,
+                          url: article.url),
+                    );
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(
