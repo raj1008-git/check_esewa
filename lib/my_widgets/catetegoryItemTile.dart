@@ -1,46 +1,27 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../provider/book_mark_provider.dart';
 import 'album_model.dart';
-import 'information_model.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import intl package
+// import 'bookmark_model.dart'; // Import your BookmarkModel
 
-import 'album_model.dart';
+class CategoryItemTile extends StatelessWidget {
+  final Article article;
+  final VoidCallback onPressed;
 
-class CategoryItemTile extends StatefulWidget {
-  final Source source;
-  final String? author;
-  final String title;
-  final String? description;
-  final String url;
-  final String? urlToImage;
-  final DateTime publishedAt;
-  final String? content;
+  final bool? isBookmarked;
 
   CategoryItemTile({
-    required this.source,
-    required this.author,
-    required this.title,
-    required this.urlToImage,
-    required this.content,
-    required this.description,
-    required this.publishedAt,
-    required this.url,
+    required this.article,
+    this.isBookmarked = false,
+    required this.onPressed,
   });
 
   @override
-  State<CategoryItemTile> createState() => _CategoryItemTileState();
-}
-
-class _CategoryItemTileState extends State<CategoryItemTile> {
-  bool _isBookmarked = false;
-  @override
   Widget build(BuildContext context) {
-    // Format the DateTime object to a string
     String formattedDate =
-        DateFormat('yyyy-MM-dd – kk:mm').format(widget.publishedAt);
+        DateFormat('yyyy-MM-dd – kk:mm').format(article.publishedAt);
+    // Check if current tile is bookmarked
 
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -53,15 +34,15 @@ class _CategoryItemTileState extends State<CategoryItemTile> {
               width: 120,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                image: widget.urlToImage != null
+                image: article.urlToImage != null
                     ? DecorationImage(
-                        image: NetworkImage(widget.urlToImage!),
+                        image: NetworkImage(article.urlToImage!),
                         fit: BoxFit.cover,
                       )
                     : null,
-                color: widget.urlToImage == null ? Colors.grey : null,
+                color: article.urlToImage == null ? Colors.grey : null,
               ),
-              child: widget.urlToImage == null
+              child: article.urlToImage == null
                   ? Icon(Icons.image, size: 50, color: Colors.white)
                   : null,
             ),
@@ -75,11 +56,11 @@ class _CategoryItemTileState extends State<CategoryItemTile> {
                 children: [
                   Row(
                     children: [
-                      if (widget.author != null)
+                      if (article.author != null)
                         SizedBox(
                           width: 200,
                           child: Text(
-                            widget.author!,
+                            article.author!,
                             style: const TextStyle(
                               color: Colors.grey,
                               fontWeight: FontWeight.bold,
@@ -91,7 +72,7 @@ class _CategoryItemTileState extends State<CategoryItemTile> {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    widget.title,
+                    article.title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -113,17 +94,14 @@ class _CategoryItemTileState extends State<CategoryItemTile> {
             flex: 1,
             child: Center(
               child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _isBookmarked = !_isBookmarked;
-                    });
-                  },
-                  icon: Icon(
-                    _isBookmarked
-                        ? Icons.bookmark_add_outlined
-                        : Icons.bookmark_border,
-                    color: _isBookmarked ? Colors.green : Colors.grey,
-                  )),
+                onPressed: onPressed,
+                icon: Icon(
+                  isBookmarked!
+                      ? Icons.bookmark_add_outlined
+                      : Icons.bookmark_border,
+                  color: isBookmarked! ? Colors.green : Colors.grey,
+                ),
+              ),
             ),
           ),
         ],

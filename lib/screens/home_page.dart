@@ -1,6 +1,8 @@
 import 'package:autumn/my_widgets/catetegoryItemTile.dart';
+import 'package:autumn/my_widgets/slider_list.dart';
 import 'package:autumn/screens/book_marks.dart';
 import 'package:autumn/screens/profile_page.dart';
+import 'package:provider/provider.dart';
 
 import '../api/api.dart';
 import '../my_widgets/album_model.dart';
@@ -18,6 +20,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+import '../my_widgets/slider_container.dart';
+import '../provider/book_mark_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -38,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final screens = [
       NewsMainPage(futureAlbum: futureAlbum),
-      const BookMarks(),
+      BookmarkPage(),
       const ProfilePage(),
     ];
     return Scaffold(
@@ -120,28 +125,7 @@ class NewsMainPage extends StatelessWidget {
       children: [
         SizedBox(height: 20),
         CarouselSlider(
-          items: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: const DecorationImage(
-                  image: NetworkImage(
-                      'https://plus.unsplash.com/premium_photo-1675715924047-a9cf6c539d9b?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: const DecorationImage(
-                  image: NetworkImage(
-                      'https://images.unsplash.com/photo-1486365227551-f3f90034a57c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ],
+          items: sliderList,
           options: CarouselOptions(
             height: 260,
             enlargeCenterPage: true,
@@ -184,22 +168,20 @@ class NewsMainPage extends StatelessWidget {
                   itemCount: snapshot.data!.articles.length,
                   itemBuilder: (context, index) {
                     final article = snapshot.data!.articles[index];
+                    sliderList.add(
+                      SliderContainer(
+                        author: article.author,
+                        publishedAt: article.publishedAt,
+                        urlToImage: article.urlToImage,
+                        title: article.title,
+                        url: article.url,
+                        content: article.content,
+                        source: article.source,
+                        description: article.description,
+                      ),
+                    );
                     return GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => NewsPage(
-                        //         source: article.source,
-                        //         author: article.author,
-                        //         title: article.title,
-                        //         urlToImage: article.urlToImage,
-                        //         content: article.content,
-                        //         description: article.description,
-                        //         publishedAt: article.publishedAt,
-                        //         url: article.url),
-                        //   ),
-                        // );
                         Navigator.push(
                           context,
                           PageRouteBuilder(
@@ -228,15 +210,17 @@ class NewsMainPage extends StatelessWidget {
                           ),
                         );
                       },
-                      child: CategoryItemTile(
-                          source: article.source,
-                          author: article.author,
-                          title: article.title,
-                          urlToImage: article.urlToImage,
-                          content: article.content,
-                          description: article.description,
-                          publishedAt: article.publishedAt,
-                          url: article.url),
+                      child:
+                          Consumer<BookmarkModel>(builder: (context, value, _) {
+                        return CategoryItemTile(
+                          onPressed: () {
+                            Provider.of<BookmarkModel>(context, listen: false)
+                                .toggleBookmark(article);
+                          },
+                          article: article,
+                          isBookmarked: value.bookmarkedItems.contains(article),
+                        );
+                      }),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {

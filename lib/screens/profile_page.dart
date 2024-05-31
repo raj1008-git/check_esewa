@@ -36,7 +36,7 @@ class ProfilePage extends StatelessWidget {
                         const CircleAvatar(
                           radius: 70,
                           backgroundImage: NetworkImage(
-                              'https://c.ndtvimg.com/iqv34p4o_sui-dhaaga-youtube_625x300_29_August_18.jpg'),
+                              'https://i.ytimg.com/vi/dpaPOdioeRY/hqdefault.jpg?sqp=-oaymwEmCOADEOgC8quKqQMa8AEB-AHmA4AC0AWKAgwIABABGGUgUihMMA8=&rs=AOn4CLA-xruU0bgIcCb1sP62eW8eop_Dag'),
                         ),
                         // Circular avatar
                         Positioned(
@@ -67,7 +67,7 @@ class ProfilePage extends StatelessWidget {
                       height: 20,
                     ),
                     const Text(
-                      'Sharma ji ki beti',
+                      'Zomato Boy',
                       style:
                           TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),

@@ -20,7 +20,9 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  XFile? _selectedImage;
+  // XFile? _selectedImage;
+  // File? _imgFile;
+  // final ImagePicker _picker = ImagePicker();
   // void launchDialPad() async {
   //   const url = 'tel:';
   //   if (await canLaunchUrl(Uri.parse(url))) {
@@ -29,16 +31,28 @@ class _EditProfileState extends State<EditProfile> {
   //     throw 'Could not launch $url';
   //   }
   // }
+  final ImagePicker _picker = ImagePicker();
+  XFile? _image;
 
-  Future _pickImageFromGallary() async {
-    final returnedImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (_selectedImage == null) return;
+  // Future _pickImageFromGallary() async {
+  //   void takeSnapshot() async {
+  //     final ImagePicker picker = ImagePicker();
+  //     final XFile? img = await picker.pickImage(
+  //       source: ImageSource.camera, // alternatively, use ImageSource.gallery
+  //       maxWidth: 400,
+  //     );
+  //     if (img == null) return;
+  //     setState(() {
+  //       _imgFile = File(img.path); // convert it to a Dart:io file
+  //     });
+  //   }
+  // }
+  Future getImage() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
 
-    final imageTemp = XFile(_selectedImage!.path);
-    _selectedImage = imageTemp;
-
-    setState(() {});
+    setState(() {
+      _image = image;
+    });
   }
 
   @override
@@ -74,10 +88,10 @@ class _EditProfileState extends State<EditProfile> {
                       // ),
                       CircleAvatar(
                         radius: 70,
-                        backgroundImage: (_selectedImage == null)
+                        backgroundImage: (_image == null)
                             ? const NetworkImage(
                                 'https://scontent.fktm6-1.fna.fbcdn.net/v/t39.30808-6/386350582_278042408394509_2909557155378589543_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5f2048&_nc_ohc=AQBxcc7poKoQ7kNvgH67_N1&_nc_ht=scontent.fktm6-1.fna&oh=00_AfAW8xCdBH5wWQRoL7VufQIaXjlroS9vQQevT6qc_kRhvw&oe=66424DB4')
-                            : Image.file(_selectedImage as File).image,
+                            : FileImage(File(_image!.path)) as ImageProvider,
                       )
                       // Circular avatar
                     ],
@@ -92,7 +106,7 @@ class _EditProfileState extends State<EditProfile> {
                             fontSize: 20,
                             fontWeight: FontWeight.w500)),
                     onPressed: () {
-                      _pickImageFromGallary();
+                      getImage();
                     },
                   ),
                   const SizedBox(

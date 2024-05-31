@@ -16,7 +16,7 @@ class NewsCategoryChip extends StatelessWidget {
       color: Colors.green,
       child: Text(
         category,
-        style: TextStyle(color: Colors.white, fontSize: 20),
+        style: const TextStyle(color: Colors.white, fontSize: 20),
       ),
     );
   }
